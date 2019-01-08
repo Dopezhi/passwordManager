@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pwd.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.pwd.pojo.User" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="loginId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="username" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="question" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="answer" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="role" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loginId, username, email, question, answer, role, password
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pwd.pojo.User" >
+    insert into user (id, loginId, username, 
+      email, question, answer, 
+      role, password)
+    values (#{id,jdbcType=INTEGER}, #{loginid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{question,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, 
+      #{role,jdbcType=INTEGER}, #{password,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pwd.pojo.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loginid != null" >
+        loginId,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="question != null" >
+        question,
+      </if>
+      <if test="answer != null" >
+        answer,
+      </if>
+      <if test="role != null" >
+        role,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="loginid != null" >
+        #{loginid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="question != null" >
+        #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null" >
+        #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        #{role,jdbcType=INTEGER},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pwd.pojo.User" >
+    update user
+    <set >
+      <if test="loginid != null" >
+        loginId = #{loginid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="question != null" >
+        question = #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null" >
+        answer = #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        role = #{role,jdbcType=INTEGER},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pwd.pojo.User" >
+    update user
+    set loginId = #{loginid,jdbcType=INTEGER},
+      username = #{username,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      question = #{question,jdbcType=VARCHAR},
+      answer = #{answer,jdbcType=VARCHAR},
+      role = #{role,jdbcType=INTEGER},
+      password = #{password,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="checkUserLoginId" resultType="int" parameterType="java.lang.Integer" >
+    select count(1)
+    from user
+    where loginId = #{loginId,jdbcType=INTEGER}
+  </select>
+  <select id="selectLogin" resultType="com.pwd.pojo.User" parameterType="map" >
+    select <include refid="Base_Column_List"></include>
+    from user
+    where loginId = #{loginId,jdbcType=INTEGER} and password = #{password,jdbcType=VARCHAR}
+  </select>
+  <select id="checkEmail" resultType="int" parameterType="java.lang.String" >
+    select count(1)
+    from user
+    where email = #{email,jdbcType=VARCHAR}
+  </select>
+  <select id="selectQuestionByloginId" resultType="String" parameterType="java.lang.Integer" >
+    select question
+    from user
+    where loginId = #{loginId,jdbcType=INTEGER}
+  </select>
+  <select id="checkAnswer" resultType="int" parameterType="map" >
+    select count(1)
+    from user
+    where loginId = #{loginId,jdbcType=INTEGER}
+    and question=#{question,jdbcType=VARCHAR}
+    and answer=#{answer,jdbcType=VARCHAR}
+  </select>
+  <update id="updatePasswordWithLoginId"  parameterType="map" >
+   update user
+   set password = #{password,jdbcType=VARCHAR}
+   where loginId = #{loginId,jdbcType=INTEGER}
+  </update>
+
+</mapper>

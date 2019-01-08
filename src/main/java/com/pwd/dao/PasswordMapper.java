@@ -1,0 +1,17 @@
+package com.pwd.dao;
+
+import com.pwd.pojo.Password;
+
+public interface PasswordMapper {
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(Password record);
+
+    int insertSelective(Password record);
+
+    Password selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(Password record);
+
+    int updateByPrimaryKey(Password record);
+}
