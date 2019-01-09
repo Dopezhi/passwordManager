@@ -64,9 +64,9 @@ public class UserServiceImpl implements IUserService {
     public ServerResponse<String> checkValid(int loginId,String type){
         //开始校验
         if(type.equals(Const.LOGIN_ID)){
-            String regex="^[a-z0-9_-]{8}$";
+            String regex="^[0-9_-]{9}$";
             if(!String.valueOf(loginId).matches(regex)){
-                return ServerResponse.createByErrorMsg("登录账号必须是数字且是8位");
+                return ServerResponse.createByErrorMsg("登录账号必须是数字且是9位");
             }
             int count=userMapper.checkUserLoginId(loginId);
             if(count>0){
@@ -88,9 +88,9 @@ public class UserServiceImpl implements IUserService {
                 return ServerResponse.createByErrorMsg("Email已存在");
             }
         }else if(type.equals(Const.USERNAME)){
-            String regex="^[a-z0-9_-]{2,6}$&^[\\u2E80-\\u9FFF]+$";
+            String regex="^[a-z0-9_-]{2,8}$&^[\\u2E80-\\u9FFF]+$";
             if(!str.matches(regex)){
-                return ServerResponse.createByErrorMsg("用户名长度必须是2到6的中文或者英文字符");
+                return ServerResponse.createByErrorMsg("用户名长度必须是2到8的中文或者英文字符");
             }
         }
         return ServerResponse.createBySuccessMsg("校验成功");

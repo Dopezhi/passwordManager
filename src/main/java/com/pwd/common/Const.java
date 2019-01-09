@@ -4,11 +4,16 @@ public class Const {
 
     public static final String CURRENT_USER="currentuser";
 
+    public static final String CURRENT_USER_MANAGER="currentUserManager";
+
     public static final String USERNAME="username";
 
     public static final String EMAIL="email";
 
     public static final String LOGIN_ID="loginId";
+
+    public static final String MANAGER_ID="managerId";
+
 
     //有点看不懂这个操作
     public interface Role{

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pwd.dao.UserManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.pwd.pojo.UserManager" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="manager_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="manager_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="manager_pwd" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="manager_email" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="manager_question" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="manager_answer" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="manager_role" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, manager_id, manager_name, manager_pwd, manager_email, manager_question, manager_answer, 
+    manager_role
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_manager
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_manager
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pwd.pojo.UserManager" >
+    insert into user_manager (id, manager_id, manager_name, 
+      manager_pwd, manager_email, manager_question, 
+      manager_answer, manager_role)
+    values (#{id,jdbcType=INTEGER}, #{managerId,jdbcType=INTEGER}, #{managerName,jdbcType=VARCHAR}, 
+      #{managerPwd,jdbcType=VARCHAR}, #{managerEmail,jdbcType=VARCHAR}, #{managerQuestion,jdbcType=VARCHAR}, 
+      #{managerAnswer,jdbcType=VARCHAR}, #{managerRole,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pwd.pojo.UserManager" >
+    insert into user_manager
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="managerId != null" >
+        manager_id,
+      </if>
+      <if test="managerName != null" >
+        manager_name,
+      </if>
+      <if test="managerPwd != null" >
+        manager_pwd,
+      </if>
+      <if test="managerEmail != null" >
+        manager_email,
+      </if>
+      <if test="managerQuestion != null" >
+        manager_question,
+      </if>
+      <if test="managerAnswer != null" >
+        manager_answer,
+      </if>
+      <if test="managerRole != null" >
+        manager_role,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="managerId != null" >
+        #{managerId,jdbcType=INTEGER},
+      </if>
+      <if test="managerName != null" >
+        #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="managerPwd != null" >
+        #{managerPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="managerEmail != null" >
+        #{managerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="managerQuestion != null" >
+        #{managerQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="managerAnswer != null" >
+        #{managerAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="managerRole != null" >
+        #{managerRole,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pwd.pojo.UserManager" >
+    update user_manager
+    <set >
+      <if test="managerId != null" >
+        manager_id = #{managerId,jdbcType=INTEGER},
+      </if>
+      <if test="managerName != null" >
+        manager_name = #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="managerPwd != null" >
+        manager_pwd = #{managerPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="managerEmail != null" >
+        manager_email = #{managerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="managerQuestion != null" >
+        manager_question = #{managerQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="managerAnswer != null" >
+        manager_answer = #{managerAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="managerRole != null" >
+        manager_role = #{managerRole,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pwd.pojo.UserManager" >
+    update user_manager
+    set manager_id = #{managerId,jdbcType=INTEGER},
+      manager_name = #{managerName,jdbcType=VARCHAR},
+      manager_pwd = #{managerPwd,jdbcType=VARCHAR},
+      manager_email = #{managerEmail,jdbcType=VARCHAR},
+      manager_question = #{managerQuestion,jdbcType=VARCHAR},
+      manager_answer = #{managerAnswer,jdbcType=VARCHAR},
+      manager_role = #{managerRole,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectWithPwd" resultMap="BaseResultMap" parameterType="map" >
+    select <include refid="Base_Column_List" />
+    from user_manager
+    where manager_id = #{managerId,jdbcType=INTEGER} and manager_pwd = #{managerPwd,jdbcType=VARCHAR}
+  </select>
+  <select id="getAllUsers" resultMap="BaseResultMap"  >
+    select <include refid="Base_Column_List" />
+    from user_manager
+  </select>
+</mapper>

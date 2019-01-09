@@ -3,6 +3,8 @@ package com.pwd.dao;
 import com.pwd.pojo.User;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -28,4 +30,5 @@ public interface UserMapper {
 
     int updatePasswordWithLoginId(@Param("loginId")int loginId,@Param("password")String password);
 
+    List<User> selectAllUsers();
 }

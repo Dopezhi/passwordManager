@@ -159,5 +159,8 @@
    set password = #{password,jdbcType=VARCHAR}
    where loginId = #{loginId,jdbcType=INTEGER}
   </update>
-
+  <select id="selectAllUsers" resultMap="BaseResultMap"  >
+    select <include refid="Base_Column_List" />
+    from user
+  </select>
 </mapper>
