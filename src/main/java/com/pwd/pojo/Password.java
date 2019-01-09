@@ -3,26 +3,29 @@ package com.pwd.pojo;
 public class Password {
     private Integer id;
 
-    private Integer pwdloginid;
+    private Integer pwdLoginid;
 
-    private String pwdname;
+    private String pwdName;
 
-    private String pwdcontent;
+    private String pwdDescribe;
 
-    private String pwdkey;
+    private String pwdAccount;
 
-    private String pwdurl;
+    private String pwdUrl;
 
-    private String pwdtype;
+    private Integer pwdType;
 
-    public Password(Integer id, Integer pwdloginid, String pwdname, String pwdcontent, String pwdkey, String pwdurl, String pwdtype) {
+    private String pwdPassword;
+
+    public Password(Integer id, Integer pwdLoginid, String pwdName, String pwdDescribe, String pwdAccount, String pwdUrl, Integer pwdType, String pwdPassword) {
         this.id = id;
-        this.pwdloginid = pwdloginid;
-        this.pwdname = pwdname;
-        this.pwdcontent = pwdcontent;
-        this.pwdkey = pwdkey;
-        this.pwdurl = pwdurl;
-        this.pwdtype = pwdtype;
+        this.pwdLoginid = pwdLoginid;
+        this.pwdName = pwdName;
+        this.pwdDescribe = pwdDescribe;
+        this.pwdAccount = pwdAccount;
+        this.pwdUrl = pwdUrl;
+        this.pwdType = pwdType;
+        this.pwdPassword = pwdPassword;
     }
 
     public Password() {
@@ -37,51 +40,59 @@ public class Password {
         this.id = id;
     }
 
-    public Integer getPwdloginid() {
-        return pwdloginid;
+    public Integer getPwdLoginid() {
+        return pwdLoginid;
     }
 
-    public void setPwdloginid(Integer pwdloginid) {
-        this.pwdloginid = pwdloginid;
+    public void setPwdLoginid(Integer pwdLoginid) {
+        this.pwdLoginid = pwdLoginid;
     }
 
-    public String getPwdname() {
-        return pwdname;
+    public String getPwdName() {
+        return pwdName;
     }
 
-    public void setPwdname(String pwdname) {
-        this.pwdname = pwdname == null ? null : pwdname.trim();
+    public void setPwdName(String pwdName) {
+        this.pwdName = pwdName == null ? null : pwdName.trim();
     }
 
-    public String getPwdcontent() {
-        return pwdcontent;
+    public String getPwdDescribe() {
+        return pwdDescribe;
     }
 
-    public void setPwdcontent(String pwdcontent) {
-        this.pwdcontent = pwdcontent == null ? null : pwdcontent.trim();
+    public void setPwdDescribe(String pwdDescribe) {
+        this.pwdDescribe = pwdDescribe == null ? null : pwdDescribe.trim();
     }
 
-    public String getPwdkey() {
-        return pwdkey;
+    public String getPwdAccount() {
+        return pwdAccount;
     }
 
-    public void setPwdkey(String pwdkey) {
-        this.pwdkey = pwdkey == null ? null : pwdkey.trim();
+    public void setPwdAccount(String pwdAccount) {
+        this.pwdAccount = pwdAccount == null ? null : pwdAccount.trim();
     }
 
-    public String getPwdurl() {
-        return pwdurl;
+    public String getPwdUrl() {
+        return pwdUrl;
     }
 
-    public void setPwdurl(String pwdurl) {
-        this.pwdurl = pwdurl == null ? null : pwdurl.trim();
+    public void setPwdUrl(String pwdUrl) {
+        this.pwdUrl = pwdUrl == null ? null : pwdUrl.trim();
     }
 
-    public String getPwdtype() {
-        return pwdtype;
+    public Integer getPwdType() {
+        return pwdType;
     }
 
-    public void setPwdtype(String pwdtype) {
-        this.pwdtype = pwdtype == null ? null : pwdtype.trim();
+    public void setPwdType(Integer pwdType) {
+        this.pwdType = pwdType;
+    }
+
+    public String getPwdPassword() {
+        return pwdPassword;
+    }
+
+    public void setPwdPassword(String pwdPassword) {
+        this.pwdPassword = pwdPassword == null ? null : pwdPassword.trim();
     }
 }

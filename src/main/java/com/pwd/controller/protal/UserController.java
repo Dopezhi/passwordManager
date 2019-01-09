@@ -2,15 +2,18 @@ package com.pwd.controller.protal;
 
 import com.pwd.common.Const;
 import com.pwd.common.ServerResponse;
+import com.pwd.dao.UserMapper;
 import com.pwd.pojo.User;
 import com.pwd.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import com.pwd.util.MD5Util;
 import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 /**
  * 门户->用户模块
@@ -23,6 +26,8 @@ public class UserController {
     @Autowired
     private IUserService iUserService;
 
+    @Autowired
+    UserMapper userMapper;
 
     /**
      * 登录操作
@@ -170,4 +175,36 @@ public class UserController {
     public ServerResponse<String> checkValid(int loginId,String type){
         return iUserService.checkValid(loginId,type);
     }
+
+
+    @RequestMapping(value = "create.do",method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> createObject(){
+        String str;
+        StringBuilder email;
+        String passwordMD5;
+        StringBuilder pre;
+        User user=new User();
+        for(int i=10;i<=50;i++){
+            str=UUID.randomUUID().toString().substring(0,8);
+            email=new StringBuilder(str).append("@qq.com");
+
+            pre=new StringBuilder("1615432").append(String.valueOf(i));
+
+            user.setLoginid(Integer.valueOf(pre.toString()));
+            user.setUsername(str);
+            //password要加密
+            passwordMD5=MD5Util.MD5EncodeUtf8(str.toString());
+            user.setPassword(passwordMD5);
+            user.setEmail(email.toString());
+            user.setQuestion(str);
+            user.setAnswer(str);
+            user.setRole(0);
+            userMapper.insertSelective(user);
+
+        }
+        return ServerResponse.createBySuccessMsg("添加成功");
+    }
+
+
 }
