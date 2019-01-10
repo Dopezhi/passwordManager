@@ -24,7 +24,7 @@ import java.util.UUID;
 public class UserController {
 
     @Autowired
-    private IUserService iUserService;
+    IUserService iUserService;
 
     @Autowired
     UserMapper userMapper;
@@ -38,8 +38,8 @@ public class UserController {
      */
     @RequestMapping(value = "login.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> login(int loginId, String password, HttpSession session){
-        ServerResponse<User> response=iUserService.login(loginId,password);
+    public ServerResponse<User> login(String loginId, String password, HttpSession session){
+        ServerResponse<User> response=iUserService.login(Integer.valueOf(loginId),password);
         if(response.isSuccess()){
             session.setAttribute(Const.CURRENT_USER,response.getData());
         }

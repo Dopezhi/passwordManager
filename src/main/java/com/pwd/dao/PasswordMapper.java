@@ -2,6 +2,8 @@ package com.pwd.dao;
 
 import com.pwd.pojo.Password;
 
+import java.util.List;
+
 public interface PasswordMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface PasswordMapper {
     int updateByPrimaryKeySelective(Password record);
 
     int updateByPrimaryKey(Password record);
+
+    List<Password> selectAllPassword(int loginId);
 }

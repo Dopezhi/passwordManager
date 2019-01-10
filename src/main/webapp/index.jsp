@@ -200,11 +200,11 @@
             <form class="form-horizontal">
                 <span class="heading">用户登录</span>
                 <div class="form-group">
-                    <input type="email" class="form-control" id="login_input_stuId" placeholder="用户账号">
+                    <input type="email" class="form-control" id="login_input_loginid" placeholder="用户账号">
                     <i class="fa fa-user"></i>
                 </div>
                 <div class="form-group help">
-                    <input type="password" class="form-control" id="login_input_stuPwd" placeholder="密　码">
+                    <input type="password" class="form-control" id="login_input_password" placeholder="密　码">
                     <i class="fa fa-lock"></i>
                     <a href="#" class="fa fa-question-circle"></a>
                 </div>
@@ -305,46 +305,60 @@
      */
 
     //当输入的文本账号（有改变时就发请求查cookie）
-    $("#login_input_stuId").change(function () {
-        $.ajax({
-            url:"${APP_PATH}/search_cookie/"+$("#login_input_stuId").val(),
-            type:"POST",
-            success:function (result) {
-                if(result.code==100){
-                    $("#login_input_stuPwd").val(result.extend.password);
-                }
-            }
-        });
-    });
+    // $("#login_input_stuId").change(function () {
+    //     $.ajax({
+    //         url:"${APP_PATH}/search_cookie/"+$("#login_input_stuId").val(),
+    //         type:"POST",
+    //         success:function (result) {
+    //             if(result.code==100){
+    //                 $("#login_input_stuPwd").val(result.extend.password);
+    //             }
+    //         }
+    //     });
+    // });
 
     $("#login_btn").click(function() {
-        var stuId=$("#login_input_stuId").val();
-        var stuPwd=$("#login_input_stuPwd").val();
+        var loginid=$("#login_input_loginid").val();
+        var password=$("#login_input_password").val();
         //实验证明，这个是输出当前是选择（true） 不 （false）
         // alert($("#checkbox1").prop("checked"));
-        var dataStr=stuId+"-"+stuPwd+"-"+$("#checkbox1").prop("checked");
-
+        // var dataStr=stuId+"-"+stuPwd+"-"+$("#checkbox1").prop("checked");
+        <%--var str="${APP_PATH}/login.do";--%>
+        // alert(loginid);
+        // alert(password);
         $.ajax({
-            url:"${APP_PATH}/login/"+stuId,
-            data:"stuPwd="+stuPwd,
+            url:"${APP_PATH}/user/login.do",
+            // data:'{"loginId":loginid,"password":password}',
+            contentType: "application/x-www-form-urlencoded",
+            // data:{loginId:'+loginid+',password:'+password'},
+            data:{loginId:loginid,password:password},
+
             type:"POST",
             success:function(result){
-                if(result.extend.key=="manager"){
-                    window.location.href = "http://localhost:8080/StuManagementSystem/index.jsp";
-                    return false;
-                }
-                if(result.code==200){
-                    $("#message").text(result.extend.msg);
-                }else{
-                    $.ajax({
-                        url:"${APP_PATH}/remember/"+dataStr,
-                        type:"POST",
-                        success:function (result) {
+                 // if(result.extend.key=="manager"){
+                 //     window.location.href = "http://localhost:8080/StuManagementSystem/index.jsp";
+                 //     return false;
+                 // }
+                 if(result.status==1){
+                     // $("#message").text(result.extend.msg);
+                     $("#message").text(result.msg);
+                 }else{
+                     <%--$.ajax({--%>
+                         <%--url:"${APP_PATH}/remember/"+dataStr,--%>
+                         <%--type:"POST",--%>
+                         <%--success:function (result) {--%>
 
-                        }
-                    });
-                    window.location.href = "http://localhost:8080/StuManagementSystem/index2.jsp";
-                }
+                        <%--}--%>
+                     <%--});--%>
+                    window.location.href = "http://localhost:8080/user_show.jsp";
+                 }
+                // if(result.status==0){
+                //     alert("登录成功");
+                //
+                // }else{
+                //     alert(result.msg);
+                // }
+
             }
         });
     });
