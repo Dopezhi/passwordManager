@@ -29,4 +29,10 @@ public class PasswordServiceImpl implements IPasswordService {
         }
 
     }
+
+    @Override
+    public ServerResponse<Password> selectWithId(Integer passwordId) {
+        Password password=passwordMapper.selectByPrimaryKey(passwordId);
+        return ServerResponse.createBySuccessMsg(password);
+    }
 }

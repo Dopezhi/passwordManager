@@ -70,6 +70,7 @@
                     <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="nav_stuId"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a id="nav_myself">我的信息</a></li>
+                        <li><a id="nav_reset_password">修改密码</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="http://localhost:8080/StuManagementSystem/login.jsp">退出</a></li>
                     </ul>
@@ -94,7 +95,7 @@
                 <!-- 添加内联表单  name最好是跟bean相同，springmvc会为我们封装成类-->
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label for="stuId_update_input" class="col-sm-2 control-label">我的学号</label>
+                        <label for="stuId_update_input" class="col-sm-2 control-label">我的账号</label>
                         <div class="col-sm-10">
                             <input type="text" name="stuId" class="form-control" id="stuId_update_input" disabled="disabled" >
                             <span id="helpBlock" class="help-block"></span>
@@ -102,21 +103,21 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="stuName_update_input" class="col-sm-2 control-label">我的姓名</label>
+                        <label for="stuName_update_input" class="col-sm-2 control-label">用户名</label>
                         <div class="col-sm-10">
                             <input type="text" name="stuName" class="form-control" id="stuName_update_input" >
                             <span id="helpBlock" class="help-block"></span>
                             <span class="icon"></span>
                         </div>
                     </div>
-                    <div class="form-group">
+                   <!--  <div class="form-group">
                         <label for="stuPwd_update_input" class="col-sm-2 control-label">我的密码</label>
                         <div class="col-sm-10">
                             <input type="text" name="stuPwd" class="form-control" id="stuPwd_update_input" >
                             <span id="helpBlock" class="help-block"></span>
                             <span class="icon"></span>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label for="email_update_input" class="col-sm-2 control-label">我的email</label>
                         <div class="col-sm-10">
@@ -125,34 +126,6 @@
                             <span class="icon"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">我的性别</label>
-                        <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="stuGender" id="gender1_update_input" value="M" checked="checked">男
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="stuGender" id="gender2_update_input" value="F">女
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="grade_update_area" class="col-sm-2 control-label">班级</label>
-                        <div class="col-sm-4">
-                            <!-- 部门提交部门id即可 然后由数据库取出来 -->
-                            <select class="form-control" name="gradeId" id="grade_update_area">
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="stuIdf_update_static" class="col-sm-2 control-label">个人介绍</label>
-                        <div class="col-sm-10">
-                            <textarea class="form-control" rows="3" name="stuIdf" id="stuIdf_update_static"></textarea>
-                            <span id="helpBlock" class="help-block"></span>
-                        </div>
-                    </div>
-
                 </form>
             </div>
             <div class="modal-footer">
@@ -162,8 +135,41 @@
         </div>
     </div>
 </div>
-
-
+<!--用户修改密码框-->
+<div class="modal fade" id="stuResetPwdModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">请输入你的密码</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="stuId_reset_input" class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="stuOldPwd" class="form-control" id="stuId_reset_input" >
+                            <span id="helpBlock" class="help-block"></span>
+                            <span class="icon"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuName_update_input" class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="stuNewPwd" class="form-control" id="stuId_reset_new" >
+                            <span id="helpBlock" class="help-block"></span>
+                            <span class="icon"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="stu_reset_btn">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- 学生其他 按钮 的模态框 -->
@@ -275,6 +281,7 @@
         //一开始就去首页
         to_page(1);
         // get_across();
+        show_user_name_nav();
     });
 
     //获取跨越的用户名以及密码
@@ -299,7 +306,6 @@
             success:function(result){
 
                 totalRecord=result.data.total;
-
                 //console.log(result);
                 //1.解析并显示员工数据
                 build_stus_table(result);
@@ -314,9 +320,20 @@
                 // 		});
             }
         });
-        get_across();
+        // get_across();
 
     }
+    function show_user_name_nav(){
+         $.ajax({
+            url:"${APP_PATH}/user/get_user_info.do",
+            // data:"pn="+pn,
+            type:"POST",
+            success:function(result){
+                $("#nav_stuId").text(result.data.username);
+            }
+        });
+    }
+
     // function to_page_for_checked(pn,inputId){
     //     $.ajax({
     //         url:"${APP_PATH}/stus",
@@ -353,7 +370,7 @@
         //清空table表格
         $("#stus_table tbody").empty();
 
-        var stus=result.data.pageInfo.list;
+        var stus=result.data.list;
         //对于请求得来的五条数据的集合进行遍历，遍历后的每一条都将加入到<tbody>中
         $.each(stus,function(index,item){
             //alert(item.empName);
@@ -399,11 +416,11 @@
         //清空分页信息
         $("#page_info_area").empty();
 
-        $("#page_info_area").append("当前第"+result.extend.pageInfo.pageNum+"页,"
-            +"总"+result.extend.pageInfo.pages+"页,总"
-            +result.extend.pageInfo.total+"条记录");
+        $("#page_info_area").append("当前第"+result.data.pageNum+"页,"
+            +"总"+result.data.pages+"页,总"
+            +result.data.total+"条记录");
         //记录当前第几页
-        currentPage=result.extend.pageInfo.pageNum;
+        currentPage=result.data.pageNum;
     }
 
     //3.解析并显示分页条
@@ -421,7 +438,7 @@
         var prePageLi=$("<li></li>").append($("<a></a>").append("&laquo;"));
 
         //判断当前页有没有前一页和首页，没有的话就设置成这两个按键为不可操作按键
-        if(result.extend.pageInfo.hasPreviousPage==false){
+        if(result.data.hasPreviousPage==false){
             firstPageLi.addClass("disabled");
             prePageLi.addClass("disabled");
         }else{
@@ -431,7 +448,7 @@
             });
 
             prePageLi.click(function() {
-                to_page(result.extend.pageInfo.pageNum-1);
+                to_page(result.data.pageNum-1);
             });
         }
 
@@ -440,27 +457,27 @@
         var lastPageLi=$("<li></li>").append($("<a></a>").append("尾页").attr("href","#"));
 
         //同理判断当前页有没有后一页和尾页，没有的话就设置成这两个按键为不可操作按键
-        if(result.extend.pageInfo.hasNextPage==false){
+        if(result.data.hasNextPage==false){
             lastPageLi.addClass("disabled");
             nextPageLi.addClass("disabled");
         }else{
 
             nextPageLi.click(function() {
-                to_page(result.extend.pageInfo.pageNum+1);
+                to_page(result.data.pageNum+1);
             });
 
             lastPageLi.click(function() {
-                to_page(result.extend.pageInfo.pages);
+                to_page(result.data.pages);
             });
         }
         //按照框架的镶嵌添加
         ul.append(firstPageLi).append(prePageLi);
 
         //遍历页码号 item表示遍历的每一个个体
-        $.each(result.extend.pageInfo.navigatepageNums,function(index,item){
+        $.each(result.data.navigatepageNums,function(index,item){
 
             var numLi=$("<li></li>").append($("<a></a>").append(item));
-            if(result.extend.pageInfo.pageNum==item){
+            if(result.data.pageNum==item){
                 numLi.addClass("active");
             }
 
@@ -492,23 +509,7 @@
         $(ele).find(".icon").removeClass("glyphicon glyphicon-remove form-control-feedback");
     }
 
-    //为模态框打开后 获取部门列表的信息
-    function getGrades(ele) {
-        //清空样式
-        $(ele).empty();
-
-        $.ajax({
-            url:"${APP_PATH}/grades",
-            type:"GET",
-            success:function(result){
-                var gradesInfo=result.extend.grades;
-                $.each(gradesInfo,function(index,item){
-                    var selectLi=$("<option></option>").append(item.gradeName).attr("value",item.gradeId);
-                    selectLi.appendTo(ele);
-                });
-            }
-        });
-    }
+    
 
 
 
@@ -586,10 +587,53 @@
             backdrop:"true", //如果设置成static就不会消失
         });
     });
-    //获取学生信息
-    function getStu(id,location){
+
+    $("#nav_myself").click(function() {
+        // var stuId=$("#nav_stuId").text();
+        // var stuId=$("#nav_stuId").attr("realid");
+        reset_form("#stuUpdateModal form");
+        // getGrades("#grade_update_area");
+        getStu("stuUpdateModal");
+        // $("#stu_update_btn").attr("update-id",stuId);
+        // $("#stu_update_btn").attr("ajax-va","");
+        //获取这个表单初始状态信息
+        //在模态框之前获取学生信息
+        $('#stuUpdateModal').modal({
+            backdrop:"true", //如果设置成static就不会消失
+        });
+    });
+
+    $("#nav_reset_password").click(function() {
+        reset_form("#stuResetPwdModal form");
+        $('#stuResetPwdModal').modal({
+            backdrop:"true", //如果设置成static就不会消失
+        });
+    });
+
+    $("#stu_reset_btn").click(function(){
+        var oldPwd=$("#stuId_reset_input").val();
+        var newPwd=$("#stuId_reset_new").val();
         $.ajax({
-            url:"${APP_PATH}/stu/"+id,
+            url:"${APP_PATH}/user/reset_password.do",
+            contentType: "application/x-www-form-urlencoded",
+            data:{passwordOld:oldPwd,passwordNew:newPwd},
+            type:"POST",
+            success:function(result){
+                if(result.status==0){
+                    alert(result.msg);
+                }else if(result.status==1){
+                    alert(result.msg);
+                    $("#stuResetPwdModal").modal('hide');
+                }
+            }
+        });
+       
+    });
+
+    //获取学生信息
+    function getStu(location){
+        $.ajax({
+            url:"${APP_PATH}/user/get_user_info.do",
             type:"POST",
             success:function(result){
                 if(location=="stuDetailModal"){
@@ -603,6 +647,8 @@
         });
     }
 
+
+
     //获取学生信息之 给查看窗口布局
     function setMsgInDetail(result){
         var stuData=result.extend.stu;
@@ -612,35 +658,22 @@
     }
     //获取学生信息之 给编辑窗口布局
     function setMsgInUpdate(result){
-        var stuData=result.extend.stu;
-        $("#stuId_update_input").val(stuData.stuId);
-        $("#stuName_update_input").val(stuData.stuName);
-        $("#stuPwd_update_input").val(stuData.stuPwd);
+        var stuData=result.data;
+        $("#stuId_update_input").val(stuData.loginid);
+        $("#stuName_update_input").val(stuData.username);
+        // $("#stuPwd_update_input").val(stuData.stuPwd);
         $("#email_update_input").val(stuData.email);
-        $("#stuUpdateModal input[name=stuGender]").val([stuData.stuGender]);
-        $("#stuUpdateModal select").val(stuData.gradeId);
-        $("#stuIdf_update_static").val(stuData.stuIdf);
+        // $("#stuUpdateModal input[name=stuGender]").val([stuData.stuGender]);
+        // $("#stuUpdateModal select").val(stuData.gradeId);
+        // $("#stuIdf_update_static").val(stuData.stuIdf);
         beforeInfo=$("#stuUpdateModal form").serialize();
-        console.log(beforeInfo);
+        // console.log(beforeInfo);
 
     }
 
 
 
-    $("#nav_myself").click(function() {
-        // var stuId=$("#nav_stuId").text();
-        var stuId=$("#nav_stuId").attr("realid");
-        reset_form("#stuUpdateModal form");
-        getGrades("#grade_update_area");
-        getStu(stuId,"stuUpdateModal");
-        $("#stu_update_btn").attr("update-id",stuId);
-        $("#stu_update_btn").attr("ajax-va","");
-        //获取这个表单初始状态信息
-        //在模态框之前获取学生信息
-        $('#stuUpdateModal').modal({
-            backdrop:"true", //如果设置成static就不会消失
-        });
-    });
+   
 
 
     //统一实现及填及时显示是否可用
@@ -653,19 +686,6 @@
             return false;
         }else{
             show_validate_msg("#stuName_update_input","success"," ");
-            $("#stu_update_btn").attr("ajax-va","success");
-        }
-
-    });
-    $("#stuPwd_update_input").change(function() {
-        var stuPwd=this.value;
-        var regPwd=/^[a-zA-Z0-9_-]{3,9}$/;
-        if(!regPwd.test(stuPwd)){
-            show_validate_msg("#stuPwd_update_input","error","密码必须是3-9位英文数字组合");
-            $("#stu_update_btn").attr("ajax-va","error");
-            return false;
-        }else{
-            show_validate_msg("#stuPwd_update_input","success"," ");
             $("#stu_update_btn").attr("ajax-va","success");
         }
 

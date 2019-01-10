@@ -53,4 +53,10 @@ public class PasswordController {
         //todo
         return null;
     }
+
+    @RequestMapping(value="search_password.do",method = RequestMethod.POST)
+    @ResponseBody
+   public ServerResponse<Password> searchPassword(Integer passwordId){
+        return iPasswordService.selectWithId(passwordId);
+   }
 }

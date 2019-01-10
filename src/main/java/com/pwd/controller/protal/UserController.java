@@ -138,6 +138,8 @@ public class UserController {
     @RequestMapping(value = "reset_password.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> resetPassword(String passwordOld,String passwordNew,HttpSession session){
+        System.out.println(passwordOld);
+        System.out.println(passwordNew);
         User user=(User) session.getAttribute(Const.CURRENT_USER);
         if(user==null){
             return ServerResponse.createByErrorMsg("用户不存在");

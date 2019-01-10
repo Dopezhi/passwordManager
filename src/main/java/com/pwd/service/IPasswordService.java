@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface IPasswordService {
     ServerResponse<List<Password>> getUserPasswordList(HttpSession session);
+    ServerResponse<Password> selectWithId(Integer passwordId);
+
 }
