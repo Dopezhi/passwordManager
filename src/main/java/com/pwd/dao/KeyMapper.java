@@ -14,4 +14,6 @@ public interface KeyMapper {
     int updateByPrimaryKeySelective(Key record);
 
     int updateByPrimaryKey(Key record);
+
+    int selectByKeyLoginid(int keyLoginid);
 }

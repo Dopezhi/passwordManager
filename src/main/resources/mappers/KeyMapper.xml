@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.pwd.pojo.Key" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="key_loginid" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="key_loginid" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="key_content" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
@@ -24,7 +24,7 @@
   <insert id="insert" parameterType="com.pwd.pojo.Key" >
     insert into key (id, key_loginid, key_content
       )
-    values (#{id,jdbcType=INTEGER}, #{keyLoginid,jdbcType=VARCHAR}, #{keyContent,jdbcType=VARCHAR}
+    values (#{id,jdbcType=INTEGER}, #{keyLoginid,jdbcType=INTEGER}, #{keyContent,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.pwd.pojo.Key" >
@@ -45,7 +45,7 @@
         #{id,jdbcType=INTEGER},
       </if>
       <if test="keyLoginid != null" >
-        #{keyLoginid,jdbcType=VARCHAR},
+        #{keyLoginid,jdbcType=INTEGER},
       </if>
       <if test="keyContent != null" >
         #{keyContent,jdbcType=VARCHAR},
@@ -56,7 +56,7 @@
     update key
     <set >
       <if test="keyLoginid != null" >
-        key_loginid = #{keyLoginid,jdbcType=VARCHAR},
+        key_loginid = #{keyLoginid,jdbcType=INTEGER},
       </if>
       <if test="keyContent != null" >
         key_content = #{keyContent,jdbcType=VARCHAR},
@@ -66,8 +66,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.pwd.pojo.Key" >
     update key
-    set key_loginid = #{keyLoginid,jdbcType=VARCHAR},
+    set key_loginid = #{keyLoginid,jdbcType=INTEGER},
       key_content = #{keyContent,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectByKeyLoginid" resultType="int" parameterType="java.lang.Integer" >
+    select count(1)
+    from key
+    where key_loginid = #{keyLoginid,jdbcType=INTEGER}
+  </select>
 </mapper>

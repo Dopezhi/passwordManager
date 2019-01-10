@@ -3,12 +3,17 @@ package com.pwd.pojo;
 public class Key {
     private Integer id;
 
-    private String keyLoginid;
+    private Integer keyLoginid;
 
     private String keyContent;
 
-    public Key(Integer id, String keyLoginid, String keyContent) {
+    public Key(Integer id, Integer keyLoginid, String keyContent) {
         this.id = id;
+        this.keyLoginid = keyLoginid;
+        this.keyContent = keyContent;
+    }
+
+    public Key(Integer keyLoginid, String keyContent) {
         this.keyLoginid = keyLoginid;
         this.keyContent = keyContent;
     }
@@ -25,12 +30,12 @@ public class Key {
         this.id = id;
     }
 
-    public String getKeyLoginid() {
+    public Integer getKeyLoginid() {
         return keyLoginid;
     }
 
-    public void setKeyLoginid(String keyLoginid) {
-        this.keyLoginid = keyLoginid == null ? null : keyLoginid.trim();
+    public void setKeyLoginid(Integer keyLoginid) {
+        this.keyLoginid = keyLoginid;
     }
 
     public String getKeyContent() {
