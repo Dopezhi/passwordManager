@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pwd.common.Const;
 import com.pwd.common.ServerResponse;
+import com.pwd.dao.PasswordMapper;
 import com.pwd.pojo.Password;
 import com.pwd.pojo.User;
 import com.pwd.pojo.UserManager;
@@ -25,10 +26,12 @@ public class PasswordController {
     @Autowired
     IPasswordService iPasswordService;
 
+    @Autowired
+    PasswordMapper passwordMapper;
+
     @RequestMapping(value = "list.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<PageInfo> getUserPasswordList(@RequestParam(defaultValue = "5") int pageSize
-            , @RequestParam(defaultValue = "1") int pageNum, HttpSession session){
+    public ServerResponse<PageInfo> getUserPasswordList(Integer pageNum, HttpSession session){
 //        UserManager currentUserManager= (UserManager) session.getAttribute(Const.CURRENT_USER_MANAGER);
 //        if(currentUserManager==null){
 //            return ServerResponse.createByErrorMsg("当前无管理员登录，请登录");
@@ -37,12 +40,17 @@ public class PasswordController {
 //        List<User> users=iUserManagerService.getAllUsers();
 //        PageInfo page = new PageInfo(users,pageSize);
 //        return ServerResponse.createBySuccessMsg(page);
+        System.out.println(pageNum);
+        System.out.println(session);
         ServerResponse reponse=iPasswordService.getUserPasswordList(session);
         if(!reponse.isSuccess()){
             return reponse;
         }
-        List<Password> userPasswordList= (List<Password>) reponse.getData();
-        PageInfo page=new PageInfo(userPasswordList,pageSize);
+        PageHelper.startPage(pageNum,5);
+        ServerResponse secondReponse=iPasswordService.getUserPasswordList(session);
+        List<Password> userPasswordList= (List<Password>) secondReponse.getData();
+//        passwordMapper.
+        PageInfo page=new PageInfo(userPasswordList,5);
         return ServerResponse.createBySuccessMsg(page);
 
     }

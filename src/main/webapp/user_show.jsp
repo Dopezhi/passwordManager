@@ -57,7 +57,7 @@
             </ul>
             <form class="navbar-form navbar-left">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search" id="nav_search_input">
+                    <input type="text" class="form-control" placeholder="请输入你的密码名" id="nav_search_input">
                 </div>
                 <button type="button" class="btn btn-default" id="nav-search">查找</button>
             </form>
@@ -72,7 +72,7 @@
                         <li><a id="nav_myself">我的信息</a></li>
                         <li><a id="nav_reset_password">修改密码</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="http://localhost:8080/StuManagementSystem/login.jsp">退出</a></li>
+                        <li><a id="nav_logout" href="http://localhost:8080/index.jsp">退出</a></li>
                     </ul>
                 </li>
             </ul>
@@ -122,6 +122,22 @@
                         <label for="email_update_input" class="col-sm-2 control-label">我的email</label>
                         <div class="col-sm-10">
                             <input type="email" name="email" class="form-control" id="email_update_input">
+                            <span id="helpBlock" class="help-block"></span>
+                            <span class="icon"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="question_update_input" class="col-sm-2 control-label">密保问题</label>
+                        <div class="col-sm-10">
+                            <input type="email" name="question" class="form-control" id="question_update_input">
+                            <span id="helpBlock" class="help-block"></span>
+                            <span class="icon"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="answer_update_input" class="col-sm-2 control-label">密保答案</label>
+                        <div class="col-sm-10">
+                            <input type="email" name="answer" class="form-control" id="answer_update_input">
                             <span id="helpBlock" class="help-block"></span>
                             <span class="icon"></span>
                         </div>
@@ -184,23 +200,30 @@
                 <!-- 添加内联表单  name最好是跟bean相同，springmvc会为我们封装成类-->
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label for="stuName_detail_static" class="col-sm-2 control-label">学生姓名</label>
+                        <label for="stuName_detail_static" class="col-sm-2 control-label">密码名</label>
                         <div class="col-sm-10">
-                            <input class="form-control" id="stuName_detail_static" type="text" disabled>
+                            <input class="form-control" id="pwdName_detail_static" type="text" disabled>
                             <span id="helpBlock" class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="email_detail_static" class="col-sm-2 control-label">email</label>
+                        <label for="email_detail_static" class="col-sm-2 control-label">账号</label>
                         <div class="col-sm-10">
-                            <input class="form-control" id="email_detail_static" type="text" disabled>
+                            <input class="form-control" id="pwdAccount_detail_static" type="text" disabled>
                             <span id="helpBlock" class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="stuIdf_detail_static" class="col-sm-2 control-label">个人介绍</label>
+                        <label for="email_detail_static" class="col-sm-2 control-label">密码</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" rows="3" name="stuIdf" id="stuIdf_detail_static" disabled="disabled"></textarea>
+                            <input class="form-control" id="pwdPassword_detail_static" type="text" disabled>
+                            <span id="helpBlock" class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuIdf_detail_static" class="col-sm-2 control-label">密码描述</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" rows="3" name="stuIdf" id="pwdDescribe_detail_static" disabled="disabled"></textarea>
                             <span id="helpBlock" class="help-block"></span>
                         </div>
                     </div>
@@ -298,10 +321,11 @@
 
 
     //到第几页的方法
-    function to_page(pn) {
+    function to_page(pageNum) {
         $.ajax({
             url:"${APP_PATH}/password/list.do",
-            // data:"pn="+pn,
+            contentType:"application/x-www-form-urlencoded",
+            data:"pageNum="+pageNum,
             type:"POST",
             success:function(result){
 
@@ -313,11 +337,11 @@
                 build_page_info(result);
                 // //3.解析并显示分页条
                 build_page_nav(result);
-                // $.each($(".check_item"),function(index,item){
-                // 			// stuNames+=$(this).parents("tr").find("td:eq(2)").text()+",";
-                // 			// del_idstr+=$(this).parents("tr").find("td:eq(1)").text()+"-";
-                // 			console.log($(item).parents("tr").find('td:eq(1)').text());
-                // 		});
+                $.each($(".check_item"),function(index,item){
+                			// stuNames+=$(this).parents("tr").find("td:eq(2)").text()+",";
+                			// del_idstr+=$(this).parents("tr").find("td:eq(1)").text()+"-";
+                			console.log($(item).parents("tr").find('td:eq(1)').text());
+                		});
             }
         });
         // get_across();
@@ -334,36 +358,36 @@
         });
     }
 
-    // function to_page_for_checked(pn,inputId){
-    //     $.ajax({
-    //         url:"${APP_PATH}/stus",
-    //         data:"pn="+pn,
-    //         type:"GET",
-    //         success:function(result){
+    function to_page_for_checked(pn,inputId){
+        $.ajax({
+            url:"${APP_PATH}/stus",
+            data:"pn="+pn,
+            type:"GET",
+            success:function(result){
 
-    //             totalRecord=result.extend.pageInfo.total;
+                totalRecord=result.extend.pageInfo.total;
 
-    //             //console.log(result);
-    //             //1.解析并显示员工数据
-    //             build_stus_table(result);
-    //             //2.解析并显示分页信息
-    //             build_page_info(result);
-    //             // //3.解析并显示分页条
-    //             build_page_nav(result);
-    //             $.each($(".check_item"),function(){
-    //                 // stuNames+=$(this).parents("tr").find("td:eq(2)").text()+",";
-    //                 // del_idstr+=$(this).parents("tr").find("td:eq(1)").text()+"-";
-    //                 var stuId=$(this).parents("tr").find('td:eq(1)').text();
-    //                 // console.log(stuId);
-    //                 if(stuId==inputId){
-    //                     // $(this).prop('checked', true);
-    //                     $(this).parents("tr").addClass('success');
-    //                 }
-    //             });
-    //         }
-    //     });
-    //     get_across();
-    // }
+                //console.log(result);
+                //1.解析并显示员工数据
+                build_stus_table(result);
+                //2.解析并显示分页信息
+                build_page_info(result);
+                // //3.解析并显示分页条
+                build_page_nav(result);
+                $.each($(".check_item"),function(){
+                    // stuNames+=$(this).parents("tr").find("td:eq(2)").text()+",";
+                    // del_idstr+=$(this).parents("tr").find("td:eq(1)").text()+"-";
+                    var stuId=$(this).parents("tr").find('td:eq(1)').text();
+                    // console.log(stuId);
+                    if(stuId==inputId){
+                        // $(this).prop('checked', true);
+                        $(this).parents("tr").addClass('success');
+                    }
+                });
+            }
+        });
+        get_across();
+    }
 
     //1.解析并显示员工数据
     function build_stus_table(result) {
@@ -384,7 +408,7 @@
             var gradeTd=$("<td></td>").append(item.pwdType);
             var otherBtn=$("<button></button>").addClass("btn btn-success btn-sm look_btn")
                 .append($("<span></span>").addClass("glyphicon glyphicon-search")).append("查看");
-            otherBtn.attr("look-id",item.stuId);
+            otherBtn.attr("look-id",item.id);
             var otherTd=$("<td></td>").append(otherBtn);
 
 
@@ -581,11 +605,12 @@
 
     //列表内查看 其他 按钮
     $(document).on("click",".look_btn",function(){
-        getStu($(this).attr("look-id"),"stuDetailModal");
+        getStuPassword($(this).attr("look-id"),"stuDetailModal");
         //在模态框之前获取学生信息
         $('#stuDetailModal').modal({
             backdrop:"true", //如果设置成static就不会消失
         });
+
     });
 
     $("#nav_myself").click(function() {
@@ -640,6 +665,23 @@
                     setMsgInDetail(result);
                 }else if(location=="stuUpdateModal"){
                     setMsgInUpdate(result);
+                    beforeInfo=$("#stuUpdateModal form").serialize();
+                    // console.log(beforeInfo);
+                }
+            }
+        });
+    }
+
+    function getStuPassword(id,location){
+        $.ajax({
+            url:"${APP_PATH}/password/search_password.do",
+            type:"POST",
+            data:"passwordId="+id,
+            success:function(result){
+                if(location=="stuDetailModal"){
+                    setMsgInDetail(result);
+                }else if(location=="stuUpdateModal"){
+                    setMsgInUpdate(result);
                     // beforeInfo=$("#stuUpdateModal form").serialize();
                     // console.log(beforeInfo);
                 }
@@ -651,10 +693,11 @@
 
     //获取学生信息之 给查看窗口布局
     function setMsgInDetail(result){
-        var stuData=result.extend.stu;
-        $("#stuName_detail_static").val(stuData.stuName);
-        $("#email_detail_static").val(stuData.email);
-        $("#stuIdf_detail_static").val(stuData.stuIdf);
+        var stuData=result.data;
+        $("#pwdName_detail_static").val(stuData.pwdName);
+        $("#pwdAccount_detail_static").val(stuData.pwdAccount);
+        $("#pwdPassword_detail_static").val(stuData.pwdPassword);
+        $("#pwdDescribe_detail_static").val(stuData.pwdDescribe);
     }
     //获取学生信息之 给编辑窗口布局
     function setMsgInUpdate(result){
@@ -664,8 +707,9 @@
         // $("#stuPwd_update_input").val(stuData.stuPwd);
         $("#email_update_input").val(stuData.email);
         // $("#stuUpdateModal input[name=stuGender]").val([stuData.stuGender]);
-        // $("#stuUpdateModal select").val(stuData.gradeId);
-        // $("#stuIdf_update_static").val(stuData.stuIdf);
+        $("#question_update_input").val(stuData.question);
+        $("#answer_update_input").val(stuData.answer);
+
         beforeInfo=$("#stuUpdateModal form").serialize();
         // console.log(beforeInfo);
 
@@ -717,27 +761,27 @@
                 $("#stuUpdateModal").modal('hide');
             }else{
                 if(confirm("确定要更新信息吗?")){
-                    var updateStuId=$("#stu_update_btn").attr("update-id");
+                    // var updateStuId=$("#stu_update_btn").attr("update-id");
                     // var testString="hello";
                     $.ajax({
-                        <%--url:"${APP_PATH}/updateByStuSystem/"+updateStuId,--%>
-                        url:"${APP_PATH}/updateByStuSystem/"+updateStuId,
+                        // <%--url:"${APP_PATH}/updateByStuSystem/"+updateStuId,--%>
+                        url:"${APP_PATH}/user/update_information.do",
                         type:"POST",
                         data:$("#stuUpdateModal form").serialize(),
                         // data:{student:$("#stuUpdateModal form").serialize(),stuId:updateStuId},
                         success:function(result){
                             alert("更新成功");
-                            var page=parseInt((result.extend.NumInTable)/5)+1;
-                            console.log(page);
-                            var inRow=result.extend.NumInTable%5;
-                            console.log(inRow);
-                            //如果余数是0 证明是第五行数据  如果是其他，就是正常的
-                            $("#stuUpdateModal").modal('hide');
-                            if(inRow==0){
-                                to_page_for_checked(page-1,updateStuId);
-                            }else{
-                                to_page_for_checked(page,updateStuId);
-                            }
+                            // var page=parseInt((result.data.id)/5)+1;
+                            // console.log(page);
+                            // var inRow=result.data.id%5;
+                            // console.log(inRow);
+                            // //如果余数是0 证明是第五行数据  如果是其他，就是正常的
+                            // $("#stuUpdateModal").modal('hide');
+                            // if(inRow==0){
+                            //     to_page_for_checked(page-1,result.data.id);
+                            // }else{
+                            //     to_page_for_checked(page,result.data.id);
+                            // }
                             $("#stuUpdateModal").modal('hide');
 
                         }
@@ -765,14 +809,10 @@
     });
 
     $("#nav-search").click(function() {
-        var stuId=$("#nav_search_input").val();
-        var regId=/^[0-9_-]{3,9}$/;
-        console.log(stuId);
-        if(!regId.test(stuId)){
-            alert("学号必须是3-9个数字组合");
-            return false;
-        }else{
-            $.ajax({
+        // var stuId=$("#nav_search_input").val();
+        // var regId=/^[0-9_-]{3,9}$/;
+        // console.log(stuId);
+         $.ajax({
                 url:"${APP_PATH}/search/"+stuId,
                 type:"POST",
                 success:function(result){
@@ -789,7 +829,7 @@
                             to_page_for_checked(page-1,stuId);
                             // to_page(page-1,stuId);
                             // $("#stus_table").find("td:eq(29)")
-                            // 					.prop("checked",true);
+                            //                  .prop("checked",true);
                             //stuNames+=$(this).parents("tr").find("td:eq(2)").text()+",";
                             //del_idstr+=$(this).parents("tr").find("td:eq(1)").text()+"-";
 
@@ -803,9 +843,18 @@
                     }
                 }
             });
-        }
+       
+    });
 
-
+    $("#nav_logout").click(function(){
+         $.ajax({
+            url:"${APP_PATH}/user/logout.do",
+            contentType:"application/x-www-form-urlencoded",
+            type:"POST",
+            success:function(result){
+                alert("退出成功");
+            }
+        });
     });
 
 </script>

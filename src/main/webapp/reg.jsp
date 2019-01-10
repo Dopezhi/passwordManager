@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta  charset="utf-8">
-<title>学生管理系统注册</title>
+<title>密码管理系统注册</title>
 <%
 	pageContext.setAttribute("APP_PATH",request.getContextPath());
 %>
@@ -168,7 +168,7 @@
       <!-- 添加内联表单  name最好是跟bean相同，springmvc会为我们封装成类-->
         <form class="form-horizontal">
             <div class="form-group">
-               <label for="stuName_reg_static" class="col-sm-2 control-label">姓名</label>
+               <label for="stuName_reg_static" class="col-sm-2 control-label">用户名</label>
                <div class="col-sm-10">
                  <input class="form-control" id="stuName_reg_static" type="text" placeholder="名字必须是2-5个中文或者6-16位英文数字组合" >
                  <span id="helpBlock" class="help-block"></span>
@@ -177,37 +177,25 @@
 			 <div class="form-group">
 			   <label for="email_detail_static" class="col-sm-2 control-label">email</label>
 			   <div class="col-sm-10">
-			     <input class="form-control" id="email_detail_static" type="text" placeholder="邮箱格式需正确，可不填" >
+			     <input class="form-control" id="email_detail_static" type="text" placeholder="邮箱" >
 			     <span id="helpBlock" class="help-block"></span>
 			   </div>
 			 </div>
-			  <div class="form-group">
-			   <label class="col-sm-2 control-label">性别</label>
-			   <div class="col-sm-10">
-			     <label class="radio-inline">
-					<input type="radio" name="stuGender" id="gender1_update_input" value="M" checked="checked">男
-				</label>
-				<label class="radio-inline">
-					  <input type="radio" name="stuGender" id="gender2_update_input" value="F">女
-				</label>
-			   </div>
-			 </div>
 			 <div class="form-group">
-        		 <label for="grade_update_area" class="col-sm-2 control-label">班级</label>
-         			<div class="col-sm-4">
-         <!-- 部门提交部门id即可 然后由数据库取出来 -->
-          			 <select class="form-control" name="gradeId" id="grade_update_area">
-         
-        			</select>
-        		 </div>
-     	    </div>		
-			  <div class="form-group">
-			   <label for="stuIdf_detail_static" class="col-sm-2 control-label">介绍</label>
-			   <div class="col-sm-10">
-			     <textarea class="form-control" rows="3" name="stuIdf" id="stuIdf_detail_static" style="margin: 0px -2.31534px 0px 0px; width: 379px; height: 89px;" ></textarea>
-			     <span id="msg" class="help-block"></span>
-			   </div>
-			 </div>	
+               <label for="email_detail_static" class="col-sm-2 control-label">密保问题</label>
+               <div class="col-sm-10">
+                 <input class="form-control" id="question_detail_static" type="text" placeholder="密保问题" >
+                 <span id="helpBlock" class="help-block"></span>
+               </div>
+             </div>	
+             <div class="form-group">
+               <label for="email_detail_static" class="col-sm-2 control-label">密保答案</label>
+               <div class="col-sm-10">
+                 <input class="form-control" id="answer_detail_static" type="text" placeholder="密保答案" >
+                 <span id="helpBlock" class="help-block"></span>
+               </div>
+             </div> 
+			  
 	 
 		</form>
 	</div>
@@ -239,15 +227,15 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <!-- <li><a href="#">学生管理系统管理端</a></li> -->
-        <li><p class="navbar-text" style="font-size: 16px;">学生管理系统</p></li>
+        <li><p class="navbar-text" style="font-size: 16px;">密码管理系统</p></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
         <li>
-        	<a href="http://localhost:8080/StuManagementSystem/login.jsp">登录</a>
+        	<a href="http://localhost:8080/index.jsp">登录</a>
         </li>
         <li>
-          <a href="http://localhost:8080/StuManagementSystem/reg.jsp">注册</a>
+          <a href="http://localhost:8080/reg.jsp">注册</a>
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -259,7 +247,7 @@
             <form class="form-horizontal" id="reg_form">
                 <span class="heading">用户注册</span>
                 <div class="form-group">
-                    <input type="text" class="form-control" id="reg_input_stuId" placeholder="学生学号">
+                    <input type="text" class="form-control" id="reg_input_stuId" placeholder="用户账号">
                     <i class="fa fa-user"></i>
                 </div>
                 <div class="form-group help">
@@ -381,55 +369,19 @@
 
     //绑定注册单击事件
     $("#login_btn").click(function() {
-        if($(this).attr("error")=="error"){
-            alert("你填写的信息有误，请检查");
-            return false;
-        }
-       //获取一系列信息看是否正确
-       var stuId=$("#reg_input_stuId").val();
-       var stuName=$("#stuName_reg_static").val();
-       var stuPwd=$("#reg_input_stuPwd").val();
-       var stuEmail=$("#email_detail_static").val();
-       var stuGender=$("#regDetailModal input[name=stuGender]").val();
-       var stuGradeId=$("#regDetailModal select").val();
-       var stuIdf=$("#stuIdf_detail_static").val();
-
-       // if(stuEmail==""){
-       //  alert("1");
-       // }
-       // if(stuIdf==""){
-       //  alert("2");
-       // }
-       if(!validate_reg_form()){
-          return false;
-       }
-       if(stuGradeId==null){
-        alert("你还没填写更多信息");
-        return false;
-       }
-       if(stuName==""){
-        alert("你还没填写姓名");
-        return false;
-       }
-       var str=stuId+'-'+stuName+'-'+stuPwd+'-'+stuGender+'-'+stuGradeId;
-       //有个奇怪的现象，当这两个为空的时候，那边是显示越界异常
-       if(stuEmail==""){
-        stuEmail="emailNull";
-       }
-       if(stuIdf==""){
-        stuIdf="stuIdfNull";
-       }
-       var other=stuEmail+"-"+stuIdf;
-       console.log(str);
-       console.log(other);
-
+        var loginid=$("#reg_input_stuId").val();
+        var password=$("#reg_input_stuPwd").val();
        $.ajax({
-            url:"${APP_PATH}/reg/"+str,
+            url:"${APP_PATH}/user/register_old.do",
             type:"POST",
-            data:"other="+other,
+            contentType: "application/x-www-form-urlencoded",
+            data:{loginId:loginid,password:password},
             success:function(result){
-                if(result.code==100){
-                    window.location.href = "http://localhost:8080/StuManagementSystem/index2.jsp";
+                if(result.status==0){
+                    alert("注册成功");
+                    // window.location.href = "http://localhost:8080/manager_show.jsp";
+                }else{
+                    alert("注册失败,"+result.msg);
                 }
             }
        });
@@ -471,7 +423,7 @@
         var regPwd=/^[a-zA-Z0-9_-]{3,9}$/;
         
         if(!regId.test(stuId)){
-            show_validate_msg("error","学号必须是3-9个数字组合");
+            show_validate_msg("error","账号必须是3-9个数字组合");
             return false;
         }else{
             show_validate_msg("success"," ");

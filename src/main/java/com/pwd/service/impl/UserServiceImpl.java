@@ -97,7 +97,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public ServerResponse<String> selectQuestion(int loginId){
+    public ServerResponse<String> selectQuestion(Integer loginId){
         //校验用户名的合法性
         ServerResponse validResponse=checkValid(loginId,Const.LOGIN_ID);
         if(!validResponse.isSuccess()){
@@ -105,7 +105,7 @@ public class UserServiceImpl implements IUserService {
             if(StringUtils.isNotBlank(question)){
                 return ServerResponse.createBySuccessMsg(question);
             }else{
-                return ServerResponse.createByErrorMsg("该用户未设置找回密码问题");
+                return ServerResponse.createByErrorMsg("该用户未设置找回密码问题或者用户不存在");
             }
         }
         return ServerResponse.createByErrorMsg("用户不存在");
@@ -166,5 +166,27 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createBySuccessMsg("更新个人信息成功");
     }
 
+    @Override
+    public User selectByPrimaryKey(int id) {
+        User user=userMapper.selectByPrimaryKey(id);
+        return user;
+    }
 
+    @Override
+    public ServerResponse<String> registerOld(User registerUser) {
+        ServerResponse flag=checkValid(registerUser.getLoginid(),Const.LOGIN_ID);
+        if(!flag.isSuccess()){
+            registerUser.setRole(Const.Role.ROLE_CUTSOMER);
+
+            //MD5加密之后再存入数据库
+            registerUser.setPassword(MD5Util.MD5EncodeUtf8(registerUser.getPassword()));
+            int num=userMapper.insertSelective(registerUser);
+            if(num==0){
+                return ServerResponse.createByErrorMsg("发生错误");
+            }
+            return  ServerResponse.createBySuccessMsg("注册成功");
+        }
+        return ServerResponse.createByErrorMsg("用户已存在");
+
+    }
 }

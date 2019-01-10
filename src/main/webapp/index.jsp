@@ -216,10 +216,87 @@
                         <input type="checkbox" value="None" id="checkbox1" name="check"/>
                         <label for="checkbox1"></label>
                     </div>
-                    <span class="text">记住密码</span>
+                    <span class="text">忘记密码</span>
                     <button type="button" class="btn btn-default" id="login_btn">登录</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="stuGetQuestionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">请输入你的登录账号</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="stuId_input_quesion" class="col-sm-2 control-label">账号</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="stuNewPwd" class="form-control" id="stuId_input_quesion" >
+                            <span id="helpBlock" class="help-block"></span>
+                            <span class="icon"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="stu_question_btn">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="stuSetNewPasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">请重新修改你的密码</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="stuId_input_quesion" class="col-sm-2 control-label">账号</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="stuNewPwd" class="form-control" id="stuId_quetion_id" disabled="disabled" >
+                            <!-- <span id="helpBlock" class="help-block"></span> -->
+                            <span class="icon"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuId_input_quesion" class="col-sm-2 control-label">密保问题</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="question" class="form-control" id="question"  disabled="disabled">
+                            <!-- <span id="helpBlock" class="help-block"></span> -->
+                            <span class="icon"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuId_input_quesion" class="col-sm-2 control-label">密保答案</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="answer" class="form-control" id="answer"  >
+                            <!-- <span id="helpBlock" class="help-block"></span> -->
+                            <span class="icon"></span>
+                        </div>
+                    </div><div class="form-group">
+                        <label for="stuId_input_quesion" class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="stuNewPwd" class="form-control" id="new_password" >
+                            <!-- <span id="helpBlock" class="help-block"></span> -->
+                            <span class="icon"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="stu_reset_password_btn">确定</button>
+            </div>
         </div>
     </div>
 </div>
@@ -249,73 +326,115 @@
     <%--});--%>
     <%--});--%>
 
-    /**
-     * 适用于第一种方法的全填充(打开网页立即填充cookie的内容)，登录成功了再发送保存cookie的请求
-     */
 
-    /*
-    //当打开网页的时候就自动填入属性
-    $(function () {
-        $.ajax({
-            url:"${APP_PATH}/search_cookie",
-            type:"POST",
-            success:function (result) {
-                $("#login_input_stuId").val(result.extend.userName);
-                $("#login_input_stuPwd").val(result.extend.password);
-            }
+    $("#checkbox1").click(function(){
+        // reset_form("#stuGetQuestionModal");
+        $('#stuGetQuestionModal').modal({
+            backdrop:"true", //如果设置成static就不会消失
         });
     });
-
-    //开始做记住密码的功能  id=checkbox1
-    $("#login_btn").click(function() {
-        var stuId=$("#login_input_stuId").val();
-        var stuPwd=$("#login_input_stuPwd").val();
-        //实验证明，这个是输出当前是选择（true） 不 （false）
-        // alert($("#checkbox1").prop("checked"));
-        var dataStr=stuId+"-"+stuPwd+"-"+$("#checkbox1").prop("checked");
-
+  
+    $("#stu_question_btn").click(function(){
+        var loginid=$("#stuId_input_quesion").val(); 
         $.ajax({
-            url:"${APP_PATH}/login/"+stuId,
-            data:"stuPwd="+stuPwd,
+            url:"${APP_PATH}/user/forget_get_question.do",
+            contentType:"application/x-www-form-urlencoded",
+            data:"loginId="+loginid,
             type:"POST",
             success:function(result){
-                if(result.extend.key=="manager"){
-                    window.location.href = "http://localhost:8080/StuManagementSystem/index.jsp";
-                    return false;
-                }
-                if(result.code==200){
-                    $("#message").text(result.extend.msg);
-                }else{
-                    $.ajax({
-                        url:"${APP_PATH}/remember/"+dataStr,
-                        type:"POST",
-                        success:function (result) {
+                if(result.status==0){
+                    $("#stuGetQuestionModal").modal('hide');
+                    getQuestion(loginid);
+                    $('#stuSetNewPasswordModal').modal({
+                        backdrop:"true", //如果设置成static就不会消失
+                     });
+               }else{
+                    show_validate_msg("#stuId_input_quesion","error",result.msg);
+               }
+            }
+        });
+    });
 
-                        }
-                    });
-                    window.location.href = "http://localhost:8080/StuManagementSystem/index2.jsp";
+    function getQuestion(loginid){
+        $.ajax({
+            url:"${APP_PATH}/user/forget_get_question.do",
+            contentType:"application/x-www-form-urlencoded",
+            data:"loginId="+loginid,
+            type:"POST",
+            success:function(result){
+                setPassword(loginid,result);
+            }
+        });
+    }
+
+
+    function setPassword(loginid,result){
+        // var stuData=result.data;
+        $("#stuId_quetion_id").val(loginid);
+        $("#question").val(result.msg);
+    }
+
+    $("#stu_reset_password_btn").click(function(){
+        var loginid=$("#stuId_quetion_id").val();
+        var question=$("#question").val();
+        var answer=$("#answer").val();
+         $.ajax({
+            url:"${APP_PATH}/user/forget_check_answer.do",
+            contentType:"application/x-www-form-urlencoded",
+            data:{loginId:loginid,question:question,answer:answer},
+            type:"POST",
+            success:function(result){
+                if(result.status==0){
+                    var token=result.msg;
+                    var new_password=$("#new_password").val();
+                    // alert("正在修改密码");
+                    resetPassword(loginid,new_password,token);
+                }else{
+                    alert("答案错误");
                 }
             }
         });
     });
-    */
 
-    /**
-     * 适用于第二种方法的密码填充（当输入正确的账号才寻找cookie找密码）
-     */
+    function resetPassword(loginid,new_password,token){
+         $.ajax({
+            url:"${APP_PATH}/user/forget_reset_password.do",
+            contentType:"application/x-www-form-urlencoded",
+            data:{loginId:loginid,passwordNew:new_password,forgetToken:token},
+            type:"POST",
+            success:function(result){
+                if(result.status==0){
+                    alert("修改成功");
+                }
+                $("#stuSetNewPasswordModal").modal('hide');
+            }
+         });
+    }
 
-    //当输入的文本账号（有改变时就发请求查cookie）
-    // $("#login_input_stuId").change(function () {
-    //     $.ajax({
-    //         url:"${APP_PATH}/search_cookie/"+$("#login_input_stuId").val(),
-    //         type:"POST",
-    //         success:function (result) {
-    //             if(result.code==100){
-    //                 $("#login_input_stuPwd").val(result.extend.password);
-    //             }
-    //         }
-    //     });
-    // });
+     function show_validate_msg(ele,status,msg) {
+        $(ele).parent().removeClass("has-success has-error has-feedback");
+        $(ele).next("span").text("");
+        $(ele).next("span").next("span").removeClass("glyphicon glyphicon-ok form-control-feedback");
+        $(ele).next("span").next("span").removeClass("glyphicon glyphicon-remove form-control-feedback");
+        if(status=="success"){
+            $(ele).parent().addClass("has-success has-feedback");
+            $(ele).next("span").text(msg);
+            $(ele).next("span").next("span").addClass("glyphicon glyphicon-ok form-control-feedback");
+        }else{
+            $(ele).parent().addClass("has-error has-feedback");
+            $(ele).next("span").text(msg);
+            $(ele).next("span").next("span").addClass("glyphicon glyphicon-remove form-control-feedback");
+        }
+    }
+
+    function reset_form(ele) {
+        $(ele)[0].reset();
+        $(ele).find("*").removeClass("has-success has-error has-feedback");
+        $(ele).find(".help-block").text("");
+        $(ele).find(".icon").removeClass("glyphicon glyphicon-ok form-control-feedback");
+        $(ele).find(".icon").removeClass("glyphicon glyphicon-remove form-control-feedback");
+    }
+
 
     $("#login_btn").click(function() {
         var loginid=$("#login_input_loginid").val();

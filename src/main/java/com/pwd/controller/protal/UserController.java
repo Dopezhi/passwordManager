@@ -3,6 +3,7 @@ package com.pwd.controller.protal;
 import com.pwd.common.Const;
 import com.pwd.common.ServerResponse;
 import com.pwd.dao.UserMapper;
+import com.pwd.pojo.Password;
 import com.pwd.pojo.User;
 import com.pwd.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,18 @@ public class UserController {
         return iUserService.register(user);
     }
 
+
+
+    @RequestMapping(value = "register_old.do",method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> registerOld(Integer loginId,String password){
+        User registerUser=new User();
+        registerUser.setLoginid(loginId);
+        registerUser.setPassword(password);
+        return iUserService.registerOld(registerUser);
+    }
+
+
     /**
      * 获取用户登录信息
      * 因为没有涉及到service层以及dao层，可以直接在controller中写逻辑
@@ -97,7 +110,7 @@ public class UserController {
      */
     @RequestMapping(value = "forget_get_question.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> forgetGetQuestion(int loginId){
+    public ServerResponse<String> forgetGetQuestion(Integer loginId){
         return iUserService.selectQuestion(loginId);
     }
 
@@ -110,7 +123,7 @@ public class UserController {
      */
     @RequestMapping(value = "forget_check_answer.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> forgetCheckAnswer(int loginId,String question,String answer){
+    public ServerResponse<String> forgetCheckAnswer(Integer loginId,String question,String answer){
         return iUserService.checkAnswer(loginId,question,answer);
     }
 
@@ -124,7 +137,7 @@ public class UserController {
      */
     @RequestMapping(value = "forget_reset_password.do",method = RequestMethod.POST)
     @ResponseBody
-        public ServerResponse<String> forgetResetPassword(int loginId,String passwordNew,String forgetToken){
+        public ServerResponse<String> forgetResetPassword(Integer loginId,String passwordNew,String forgetToken){
         return iUserService.forgetResetPassword(loginId,passwordNew,forgetToken);
     }
 
@@ -166,8 +179,9 @@ public class UserController {
         user.setLoginid(currentUser.getLoginid());
         user.setRole(currentUser.getRole());
         ServerResponse serverResponse=iUserService.updateInformation(user);
+        User NewCurrentUser=iUserService.selectByPrimaryKey(user.getId());
         if(serverResponse.isSuccess()){
-            session.setAttribute(Const.CURRENT_USER,(User)serverResponse.getData());
+            session.setAttribute(Const.CURRENT_USER,NewCurrentUser);
         }
         return serverResponse;
     }
